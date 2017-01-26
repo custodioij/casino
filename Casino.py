@@ -1,15 +1,21 @@
+"""Defines class Casino, and all methods needed to simulate an evening.
+The simulate_evening() method, applied to an object of class Casino with default values for its attributes should be
+    enough for a single complete simulation.
+"""
 import Tables
 import People
 import random
 
 
 class Casino(object):
-    def __init__(self, r_tables=[], c_tables=[], croupiers=[], barmen=[], customers=[], cash=50000, promotion=200):
+    """Class for the casino, joining all the others and running the simulations."""
+    def __init__(self, r_tables=None, c_tables=None, croupiers=None, barmen=None, customers=None, cash=50000,
+                 promotion=200):
         self.r_tables = r_tables  # List of roulette tables
         self.c_tables = c_tables  # List of craps tables
-        self.croupiers = croupiers  # List of croupiers
-        self.barmen = barmen  # List of barmen
-        self.customers = customers  # List of customers
+        self.croupiers = croupiers
+        self.barmen = barmen
+        self.customers = customers
         self.cash = cash  # Starting cash of the casino
         self.promotion = promotion  # Promotion given to bachelors
 
@@ -39,13 +45,14 @@ class Casino(object):
         returners = [People.Returning() for _ in range(n_returning)]
         one_timers = [People.OneTime() for _ in range(n_one_time)]
         bachelors = [People.Bachelor() for _ in range(n_bachelors)]
-        [x.initial_budget() for x in list(returners + one_timers + bachelors)]
-        print("Customers bought " + str(sum([x.current_budget for x in list(returners + one_timers + bachelors)])) +
+        c_list = list(returners + one_timers + bachelors)
+        [x.set_initial_budget() for x in c_list]
+        print("Customers bought " + str(sum([x.budget for x in c_list])) +
               " in chips.")
         for x in bachelors:
-            x.current_budget += self.promotion
+            x.budget += self.promotion
             self.cash -= self.promotion
-        self.customers = list(returners + one_timers + bachelors)
+        self.customers = c_list
 
     def get_a_drink(self):
         """Assign to every customer a barman randomly, and they buy drinks.
@@ -73,17 +80,23 @@ class Casino(object):
         self.fill_tables()
         values_won = [x.simulate_round(silent=silent) for x in (self.r_tables + self.c_tables)]
         self.clear_tables()
-        values_won = [item for sublist in values_won for item in sublist]  # Flattens the list
+        values_won = [item for sublist in values_won for item in sublist]  # Flattens the list of lists
         count = sum([1 for x in values_won if x])
-        print(str(count) + " players won a total of " + str(sum(values_won)) + " in this round")
+        if count > 0:
+            print(str(count) + " players won a total of " + str(sum(values_won)) + " in this round")
+        else:
+            print("No player won in this round")
 
-    def simulate_night(self, n_roulette=10, n_craps=10, n_barmen=4, capacity=100, per_returning=.5, per_bachelors=.2,
-                       n_drinks=5, n_rounds=3, silent=True):
+    def simulate_evening(self, n_roulette=10, n_craps=10, n_barmen=4, capacity=100, per_returning=.5, per_bachelors=.2,
+                         n_drinks=5, n_rounds=3, silent=True):
+        """Simulates a complete evening at the casino, from the setup to the results."""
+        # Setup
         initial_cash = self.cash
         self.buy_tables(n_roulette, n_craps)
         self.hire_employees(n_barmen)
         self.assign_croupiers()
         self.open_doors(capacity, per_returning, per_bachelors)
+        # Play games and buy drinks a set amount of times
         while n_drinks > 0 or n_rounds > 0:
             if n_drinks > 0:
                 self.get_a_drink()
@@ -91,22 +104,19 @@ class Casino(object):
             if n_rounds > 0:
                 self.play_round(silent=silent)
                 n_rounds -= 1
+        # Collect profits from the tables
         for x in (self.r_tables + self.c_tables):
             self.cash += x.profit
-        print("Customers changed " + str(sum([x.current_budget for x in self.customers])) +
+        # Analyze results
+        print("Customers changed " + str(sum([x.budget for x in self.customers])) +
               " in chips for cash")
         print("Profit of " + str(self.cash - initial_cash) + " tonight")
 
-# Simulation:
 
+print(Casino.__doc__)
 monte_carlo = Casino()
-monte_carlo.simulate_night()
+monte_carlo.simulate_evening()
 
-# monte_carlo.buy_tables()
-# monte_carlo.hire_employees()
-# monte_carlo.assign_croupiers()
-# monte_carlo.open_doors()
-# monte_carlo.fill_tables()
-# monte_carlo.get_a_drink()
-# monte_carlo.play_round(silent=True)
-# print(monte_carlo.cash)
+print(monte_carlo.customers[0].initial_budget)
+print(monte_carlo.customers[99].initial_budget)
+print(monte_carlo.customers[99].initial_upper_bound)
