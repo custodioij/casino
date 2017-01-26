@@ -7,7 +7,7 @@ class Table(object):
     """Defines a table"""
     bet_range = range(0)
 
-    def __init__(self, mini, croupier, customers, profit=0):
+    def __init__(self, mini=0, croupier=None, customers=None, profit=0):
         self.mini = mini
         self.croupier = croupier
         self.customers = customers
@@ -74,7 +74,7 @@ class Roulette(Table):
         if type(expected_return) == str:
             prize = 30  # Default for the Roulette game (according to the exam)
         else:
-            prize = 1 / float(expected_return)  # Explicitly ask for a float
+            prize = float(expected_return) * 33  # Explicitly ask for a float
         value_won = [above * win * bet * prize for win, bet, above in zip(wins, bets, above_list)]
         profit = sum(bets) - sum(value_won)
         return [value_won, profit]
