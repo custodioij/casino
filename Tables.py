@@ -8,7 +8,7 @@ class Table(object):
     bet_range = range(0)
 
     def __init__(self, mini=0, croupier=None, customers=None, profit=0):
-        self.mini = mini
+        self.mini = mini  # Minimum bet of the table
         self.croupier = croupier
         self.customers = customers
         self.profit = profit

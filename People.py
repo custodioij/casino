@@ -6,7 +6,7 @@ from random import randint
 # Employee classes
 class Employee(object):
     def __init__(self, wage=200):
-        self.tota_wage = wage
+        self.wage = wage
 
 
 class Croupier(Employee):
@@ -33,7 +33,7 @@ class Customer(object):
         self.budget = budget
         self.drinks = drinks  # Total expenditure on drinks
         self.tips = tips  # Total tips given
-        self.barman = barman
+        self.barman = barman  # Assigned barman
         self.initial_budget = budget
 
     def set_initial_budget(self):

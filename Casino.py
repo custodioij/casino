@@ -32,6 +32,13 @@ class Casino(object):
         self.croupiers = [People.Croupier(200) for _ in range(n_croupier)]
         self.barmen = [People.Barman(200) for _ in range(n_barmen)]
 
+    def pay_wages(self):
+        y = 0
+        for x in list(self.croupiers + self.barmen):
+            y += x.wage
+        self.cash -= y
+        return y
+
     def assign_croupiers(self):
         """Assign each croupier to a table, needs the same number of the croupiers and tables"""
         for x, y in zip(self.r_tables + self.c_tables, self.croupiers):
@@ -106,12 +113,14 @@ class Casino(object):
             if n_rounds > 0:
                 self.play_round(expected_return, silent, super_silent)
                 n_rounds -= 1
-        # Collect profits from the tables
+        # Collect profits from the tables and pay employees
         for x in (self.r_tables + self.c_tables):
-            self.cash += x.profit
+            self.cash += x.profit  # Profits are not erased from tables, so they can be accessed between simulations
+        wages_paid = self.pay_wages()
         # Analyze results
         if not super_silent:
             print("Customers changed " + str(sum([x.budget for x in self.customers])) +
                   " in chips for cash")
+            print(str(wages_paid) + " was paid in wages tonight")
             print("Profit of " + str(self.cash - initial_cash) + " tonight")
-        return self.cash - initial_cash
+        return self.cash - initial_cash  # To simulate the casino's and its profit
