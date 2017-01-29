@@ -11,14 +11,11 @@ Questions to answer:
 2) Profit of Craps and Roulette tables
 
 3) Tips (barmen) per night against commissions (croupiers).
-    It is much better to be a barman
+    (It is much better to be a barman)
 
 4) Profit of an evening, for many values of expected_return.
 
-5) Bachelor's budget
-# print("VaR(5%) = " + str(np.percentile(daily_profit, 5)))
-
-# pandas.to_latex()
+5) Do bachelor's spend more or less than other?
 """
 # First define a simulations function
 
