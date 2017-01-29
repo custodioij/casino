@@ -33,6 +33,7 @@ class Casino(object):
         self.barmen = [People.Barman(200) for _ in range(n_barmen)]
 
     def pay_wages(self):
+        """Deduces the wages from the casino's cash"""
         y = 0
         for x in list(self.croupiers + self.barmen):
             y += x.wage
@@ -61,16 +62,17 @@ class Casino(object):
             self.cash -= self.promotion
         self.customers = c_list
 
-    def get_a_drink(self, super_silent=False):
+    def get_a_drink(self, super_silent=False, drinkers=.5):
         """Assign to every customer a barman randomly, and they buy drinks.
         All customers get a drink."""
         which_barmen = [random.randint(1, len(self.barmen)) for _ in self.customers]
         for x in range(len(self.customers)):
             self.customers[x].barman = self.barmen[which_barmen[x]-1]  # Customers find a barmen
-        drinks = [x.buy_drinks() for x in self.customers]  # Customers buy one or two drinks
+        drinks = [x.buy_drinks() for x in random.sample(self.customers, round(len(self.customers) * drinkers))]
+        # Customers buy one or two drinks
         self.cash += sum(drinks)  # Profit for the casino
         if not super_silent:
-            print("Sales of drinks ammounted to " + str(sum(drinks)))
+            print("Sales of drinks amounted to " + str(sum(drinks)))
 
     def clear_tables(self):
         """Clears the customer list o every table"""
@@ -117,6 +119,7 @@ class Casino(object):
         for x in (self.r_tables + self.c_tables):
             self.cash += x.profit  # Profits are not erased from tables, so they can be accessed between simulations
         wages_paid = self.pay_wages()
+        [x.realize_gains() for x in self.customers]
         # Analyze results
         if not super_silent:
             print("Customers changed " + str(sum([x.budget for x in self.customers])) +

@@ -1,8 +1,6 @@
 import Tables
 from random import randint
 import random
-# from collections import Counter
-# import numpy as np
 from matplotlib import pyplot as plt
 
 # This is used to fix the random number generator so we can test the output

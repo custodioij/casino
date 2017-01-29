@@ -43,13 +43,14 @@ class Customer(object):
         self.budget = randint(self.initial_lower_bound, self.initial_upper_bound)
         self.initial_budget = self.budget
 
-    def give_tip(self):
-        """Give tips to the assigned barman and deduce tips from the budget"""
-        if self.budget >= 20:
-            tip = randint(0, 20)
-            self.barman.tips += tip  # Barman receives the tip
-            self.tips += tip
-            self.budget -= tip
+    # This method is now inside buy_drinks()
+    # def give_tip(self):
+    #     """Give tips to the assigned barman and deduce tips from the budget"""
+    #     if self.budget >= 20:
+    #         tip = randint(0, 20)
+    #         self.barman.tips += tip  # Barman receives the tip
+    #         self.tips += tip
+    #         self.budget -= tip
 
     def buy_drinks(self):
         """Buys a drink or two if they have enough money, and tip the barman"""
@@ -58,7 +59,11 @@ class Customer(object):
             self.drinks += drink_value
             self.barman.sales += drink_value
             self.budget -= drink_value
-            self.give_tip()
+            # self.give_tip()
+            tip = randint(0, 20)
+            self.barman.tips += tip  # Barman receives the tip
+            self.tips += tip
+            self.budget -= tip
             return drink_value
         else:
             self.drinks += 0

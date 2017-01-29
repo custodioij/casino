@@ -14,7 +14,7 @@ class Table(object):
         self.profit = profit
 
     def above_minimum(self, bets):
-        """ Checks if the bets are above the minimum of the table"""
+        """Checks if the bets are above the minimum of the table"""
         above = [bet >= self.mini for bet in bets]
         return above
 
