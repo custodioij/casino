@@ -25,4 +25,4 @@ Simulation.py and EveningSimulation.py simulate the games:
     Simulation.py does preliminary simulations of the games and of the distribution of outcomes in the craps game. It
         plots the results of the dice, the prizes won by the players, and the share of the bets kept by the casino.
 
-    EveningSimulation.py simulates the evenings at the casino, and presents the outcomes (under construction)
+    EveningSimulation.py simulates the evenings at the casino, and presents the outcomes.
